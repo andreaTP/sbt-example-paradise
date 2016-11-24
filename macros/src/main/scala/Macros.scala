@@ -3,24 +3,15 @@ import scala.language.experimental.macros
 import scala.annotation.StaticAnnotation
 
 object helloMacro {
-  def impl(c: Context)(annottees: c.Expr[Any]*): c.Expr[Any] = {
+  def impl(c: Context)(): c.Expr[Any] = {
     import c.universe._
-    import Flag._
-    val result = {
-      annottees.map(_.tree).toList match {
-        case q"object $name extends ..$parents { ..$body }" :: Nil =>
-          q"""
-            object $name extends ..$parents {
-              def hello: ${typeOf[String]} = "hello"
-              ..$body
-            }
-          """
-      }
-    }
-    c.Expr[Any](result)
+
+    println("Ok")
+
+    c.Expr[Any](q""""hello"""")
   }
 }
 
-class hello extends StaticAnnotation {
-  def macroTransform(annottees: Any*) = macro helloMacro.impl
+object hello {
+  def hello() = macro helloMacro.impl
 }
